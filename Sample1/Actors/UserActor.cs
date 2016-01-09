@@ -3,6 +3,10 @@ using Akka.Actor;
 
 public class UserActor : ReceiveActor
 {
+    public static IActorRef Create(ActorSystem system, string name)
+    {
+        return system.ActorOf(Props.Create(() => new UserActor(name)), name);
+    }
     public int? CurrentStation { get; private set; }
     public string Name {get; private set;}
     
@@ -16,8 +20,8 @@ public class UserActor : ReceiveActor
     {
         CurrentStation = message.StationId;
         Console.WriteLine($"Send performed by {Name} at station {CurrentStation.Value}");
-        var selection = Context.ActorSelection($"/user/{message.StationId}");
-        Console.WriteLine(selection.PathString);
+
+        var selection = Context.ActorSelection($"/user/Station{message.StationId}");
         selection.Tell(new StationUserSendMessage(Name));
     }
 }

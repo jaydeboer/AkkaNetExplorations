@@ -3,6 +3,11 @@ using Akka.Actor;
 
 public class StationActor : ReceiveActor
 {
+    public static IActorRef Create(ActorSystem system, int stationNumber)
+    {
+        return system.ActorOf(Props.Create(() => new StationActor(stationNumber)), $"Station{stationNumber}");
+    }
+    
     public int Id { get; private set; }
     public StationActor(int id)
     {
