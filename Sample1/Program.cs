@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Akka.Actor;
 
 namespace Sample1
@@ -11,11 +8,12 @@ namespace Sample1
         public static void Main(string[] args)
         {
             var system = ActorSystem.Create("UserActorSystem");
-            var userActorProps = Props.Create<UserActor>();
-            IActorRef actor = system.ActorOf(userActorProps);
+            var userActorProps = Props.Create<UserActor>("Jay");
+            var stationActorProps = Props.Create<StationActor>(699);
+            IActorRef actor = system.ActorOf(userActorProps,"Jay");
+            IActorRef stationActor = system.ActorOf(stationActorProps, "699");
             
-            actor.Tell("Hello Universe!");
-            actor.Tell(42);
+            actor.Tell(new SendPerformedMessage(699));
             
             Console.Read();
         }

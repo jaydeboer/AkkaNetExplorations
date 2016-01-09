@@ -1,13 +1,23 @@
 using System;
 using Akka.Actor;
 
-public class UserActor : UntypedActor
+public class UserActor : ReceiveActor
 {
-    protected override void OnReceive(object message)
+    public int? CurrentStation { get; private set; }
+    public string Name {get; private set;}
+    
+    public UserActor(string name)
     {
-        if (message is string)
-            Console.WriteLine(message.ToString());
-        else if (message is int)
-            Console.WriteLine($"I guess the answer is {message}");
+        Name = name;
+        Receive<SendPerformedMessage>(message => HandleSendPerformed(message));
+    }
+
+    private void HandleSendPerformed(SendPerformedMessage message)
+    {
+        CurrentStation = message.StationId;
+        Console.WriteLine($"Send performed by {Name} at station {CurrentStation.Value}");
+        var selection = Context.ActorSelection($"/user/{message.StationId}");
+        Console.WriteLine(selection.PathString);
+        selection.Tell(new StationUserSendMessage(Name));
     }
 }
