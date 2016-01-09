@@ -15,6 +15,7 @@ namespace Sample1
             IActorRef actor = system.ActorOf(userActorProps);
             
             actor.Tell("Hello Universe!");
+            actor.Tell(42);
             
             Console.Read();
         }

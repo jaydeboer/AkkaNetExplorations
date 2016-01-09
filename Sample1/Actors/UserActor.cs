@@ -5,6 +5,9 @@ public class UserActor : UntypedActor
 {
     protected override void OnReceive(object message)
     {
-        Console.WriteLine(message.ToString());
+        if (message is string)
+            Console.WriteLine(message.ToString());
+        else if (message is int)
+            Console.WriteLine($"I guess the answer is {message}");
     }
 }
