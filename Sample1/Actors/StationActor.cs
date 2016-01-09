@@ -14,10 +14,16 @@ public class StationActor : ReceiveActor
         Id = id;
         Console.WriteLine("we were here");
         Receive<StationUserSendMessage>(m => OnReceivedStationUserSendMessage(m));
+        Receive<StationUserLeftMessage>(m => OnRecievedStationUserLeftMessage(m));
     }
     
     private void OnReceivedStationUserSendMessage(StationUserSendMessage message)
     {
         Console.WriteLine($"The user {message.UsersName} has arrived at station {Id}");
+    }
+    
+    private void OnRecievedStationUserLeftMessage(StationUserLeftMessage message)
+    {
+        Console.WriteLine($"The user {message.Name} has left station {Id}.");
     }
 }

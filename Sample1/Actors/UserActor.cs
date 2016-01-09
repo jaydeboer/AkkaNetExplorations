@@ -8,8 +8,8 @@ public class UserActor : ReceiveActor
         return system.ActorOf(Props.Create(() => new UserActor(name)), name);
     }
     public int? CurrentStation { get; private set; }
-    public string Name {get; private set;}
-    
+    public string Name { get; private set; }
+
     public UserActor(string name)
     {
         Name = name;
@@ -18,10 +18,21 @@ public class UserActor : ReceiveActor
 
     private void HandleSendPerformed(SendPerformedMessage message)
     {
-        CurrentStation = message.StationId;
-        Console.WriteLine($"Send performed by {Name} at station {CurrentStation.Value}");
+        var previousStation = CurrentStation;
+        if (!CurrentStation.HasValue || CurrentStation.Value != message.StationId)
+        {
+            if (previousStation.HasValue)
+            {
+                var oldStationActor = Context.ActorSelection($"/user/Station{previousStation.Value}");
+                oldStationActor.Tell(new StationUserLeftMessage(Name));
+            }
+            
+            CurrentStation = message.StationId;
+            
+            Console.WriteLine($"Send performed by {Name} at station {CurrentStation.Value}");
 
-        var selection = Context.ActorSelection($"/user/Station{message.StationId}");
-        selection.Tell(new StationUserSendMessage(Name));
+            var selection = Context.ActorSelection($"/user/Station{message.StationId}");
+            selection.Tell(new StationUserSendMessage(Name));
+        }
     }
 }
