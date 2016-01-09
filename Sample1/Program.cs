@@ -9,8 +9,7 @@ namespace Sample1
         {
             var system = ActorSystem.Create("UserActorSystem");
             IActorRef jayActor = UserActor.Create(system, "Jay");
-            IActorRef station699Actor = StationActor.Create(system, 699);
-            IActorRef station700Actor = StationActor.Create(system, 700);
+            IActorRef stationCoordinatorActor = system.ActorOf(Props.Create(() => new StationCoordinatorActor()),"StationCoordinatorActor");
             
             jayActor.Tell(new SendPerformedMessage(699));
             Console.Read();

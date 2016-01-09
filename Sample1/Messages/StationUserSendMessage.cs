@@ -1,10 +1,12 @@
 
-    public class StationUserSendMessage
+public class StationUserSendMessage
+{
+    public string UsersName { get; private set; }
+    public int StationNumber { get; private set; }
+
+    public StationUserSendMessage(int station, string usersName)
     {
-        public string UsersName {get; set;}
-        
-        public StationUserSendMessage(string usersName)
-        {
-            UsersName = usersName;
-        }
+        UsersName = usersName;
+        StationNumber = station;
     }
+}

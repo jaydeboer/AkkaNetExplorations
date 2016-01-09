@@ -23,7 +23,7 @@ public class UserActor : ReceiveActor
         {
             if (previousStation.HasValue)
             {
-                var oldStationActor = Context.ActorSelection($"/user/Station{previousStation.Value}");
+                var oldStationActor = Context.ActorSelection($"/user/StationCoordinatorActor/Station{previousStation.Value}");
                 oldStationActor.Tell(new StationUserLeftMessage(Name));
             }
             
@@ -31,8 +31,8 @@ public class UserActor : ReceiveActor
             
             Console.WriteLine($"Send performed by {Name} at station {CurrentStation.Value}");
 
-            var selection = Context.ActorSelection($"/user/Station{message.StationId}");
-            selection.Tell(new StationUserSendMessage(Name));
+            var selection = Context.ActorSelection($"/user/StationCoordinatorActor");
+            selection.Tell(new StationUserSendMessage(message.StationId, Name));
         }
     }
 }
