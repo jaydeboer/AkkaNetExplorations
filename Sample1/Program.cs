@@ -16,6 +16,11 @@ namespace Sample1
             actor.Tell(new SendPerformedMessage(699));
             
             Console.Read();
+            
+            system.Shutdown();
+            system.AwaitTermination();
+            Console.WriteLine("Shutdown");
+            Console.Read();
         }
     }
 }
