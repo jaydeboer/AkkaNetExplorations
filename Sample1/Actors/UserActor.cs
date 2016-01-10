@@ -16,10 +16,10 @@ public class UserActor : ReceiveActor
         Name = name;
 
         // define what messages an actor will act upon
-        Receive<SendPerformedMessage>(message => HandleSendPerformed(message));
+        Receive<SendPerformedMessage>(message => OnReceivedSendPerformedMessage(message));
     }
 
-    private void HandleSendPerformed(SendPerformedMessage message)
+    private void OnReceivedSendPerformedMessage(SendPerformedMessage message)
     {
         var previousStation = CurrentStation;
         if (!CurrentStation.HasValue || CurrentStation.Value != message.StationId)
