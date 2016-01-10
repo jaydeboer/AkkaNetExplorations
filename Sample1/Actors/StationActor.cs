@@ -12,13 +12,17 @@ public class StationActor : ReceiveActor
         get { return _currentUsers.ToArray(); }
     }
 
+    // Constructor
     public StationActor(int id)
     {
         Id = id;
-        Console.WriteLine("we were here");
-        Receive<StationUserSendMessage>(m => OnReceivedStationUserSendMessage(m));
-        Receive<StationUserLeftMessage>(m => OnRecievedStationUserLeftMessage(m));
         _currentUsers = new HashSet<string>();
+
+        Console.WriteLine($"we were station {id}");
+
+        // define what messages an actor will act upon
+        Receive<StationUserSendMessage>(m => OnReceivedStationUserSendMessage(m));
+        Receive<StationUserLeftMessage>(m => OnReceivedStationUserLeftMessage(m));
     }
 
     private readonly HashSet<string> _currentUsers;
@@ -29,7 +33,7 @@ public class StationActor : ReceiveActor
         Console.WriteLine($"The user {message.UsersName} has arrived at station {Id}");
     }
 
-    private void OnRecievedStationUserLeftMessage(StationUserLeftMessage message)
+    private void OnReceivedStationUserLeftMessage(StationUserLeftMessage message)
     {
         _currentUsers.Remove(message.Name);
         Console.WriteLine($"The user {message.Name} has left station {Id}.");

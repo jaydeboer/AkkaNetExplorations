@@ -5,10 +5,12 @@ using Akka.Actor;
 public class StationCoordinatorActor : ReceiveActor
 {
 
+    // Constructor
     public StationCoordinatorActor()
     {
         _stations = new Dictionary<int, IActorRef>();
 
+        // define what messages an actor will act upon
         Receive<StationUserSendMessage>(m =>
         {
             CreateChildIfNotExists(m.StationNumber);

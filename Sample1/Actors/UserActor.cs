@@ -10,9 +10,12 @@ public class UserActor : ReceiveActor
     public int? CurrentStation { get; private set; }
     public string Name { get; private set; }
 
+    // Constructor
     public UserActor(string name)
     {
         Name = name;
+
+        // define what messages an actor will act upon
         Receive<SendPerformedMessage>(message => HandleSendPerformed(message));
     }
 
