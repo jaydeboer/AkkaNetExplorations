@@ -18,7 +18,7 @@ public class StationActor : ReceiveActor
         Id = id;
         _currentUsers = new HashSet<string>();
 
-        Console.WriteLine($"we were station {id}");
+        Console.WriteLine($"Creating actor for station {id}");
 
         // define what messages an actor will act upon
         Receive<StationUserSendMessage>(m => OnReceivedStationUserSendMessage(m));
@@ -36,6 +36,6 @@ public class StationActor : ReceiveActor
     private void OnReceivedStationUserLeftMessage(StationUserLeftMessage message)
     {
         _currentUsers.Remove(message.Name);
-        Console.WriteLine($"The user {message.Name} has left station {Id}.");
+        Console.WriteLine($"The user {message.Name} has left station {Id}");
     }
 }

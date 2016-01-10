@@ -2,31 +2,32 @@ using System;
 using System.Collections.Generic;
 using Akka.Actor;
 
+/// <summary>
+/// A Station Coordinator manages its collection of children (station actors).
+/// </summary>
 public class StationCoordinatorActor : ReceiveActor
 {
 
     // Constructor
     public StationCoordinatorActor()
     {
-        _stations = new Dictionary<int, IActorRef>();
+        _stationActors = new Dictionary<int, IActorRef>();
 
         // define what messages an actor will act upon
         Receive<StationUserSendMessage>(m =>
         {
-            CreateChildIfNotExists(m.StationNumber);
-
-            var stationRef = _stations[m.StationNumber];
+            var stationRef = CreateChildIfNotExists(m.StationNumber);
             stationRef.Tell(m);
         });
     }
 
-    private void CreateChildIfNotExists(int stationNumber)
+    private IActorRef CreateChildIfNotExists(int stationNumber)
     {
-        if (_stations.ContainsKey(stationNumber))
-            return;
+        if (!_stationActors.ContainsKey(stationNumber))
+            _stationActors.Add(stationNumber, Context.ActorOf(Props.Create(() => new StationActor(stationNumber)), $"Station{stationNumber}"));
 
-        _stations.Add(stationNumber, Context.ActorOf(Props.Create(() => new StationActor(stationNumber)), $"Station{stationNumber}"));
+        return _stationActors[stationNumber];
     }
 
-    private Dictionary<int, IActorRef> _stations;
+    private Dictionary<int, IActorRef> _stationActors;
 }
