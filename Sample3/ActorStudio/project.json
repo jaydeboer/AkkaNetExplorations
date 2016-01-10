@@ -1,22 +1,17 @@
 {
   "version": "1.0.0-*",
-  "description": "Sample1 Console Application",
+  "description": "Actor Studio Console Application",
   "authors": [ "" ],
   "tags": [ "" ],
   "projectUrl": "",
   "licenseUrl": "",
   "tooling": {
-    "defaultNamespace": "Sample1"
+    "defaultNamespace": "ActorStudio"
   },
 
   "dependencies": {
       "Akka": "1.0.5"
   },
-
-  "commands": {
-    "Sample1": "Sample1"
-  },
-
   "frameworks": {
     "dnx451": { }
   }

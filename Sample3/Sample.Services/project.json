@@ -1,0 +1,14 @@
+{
+  "version": "1.0.0-*",
+  "description": "Sample Services for use with the Actor Studio",
+  "authors": [ "" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "tooling": {
+    "defaultNamespace": "Sample.Services"
+  },
+  "frameworks": {
+    "dnx451": { }
+  }
+}
