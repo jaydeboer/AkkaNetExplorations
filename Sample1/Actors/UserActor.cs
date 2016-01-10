@@ -1,4 +1,3 @@
-using System;
 using Akka.Actor;
 
 public class UserActor : ReceiveActor
@@ -7,7 +6,6 @@ public class UserActor : ReceiveActor
     {
         return system.ActorOf(Props.Create(() => new UserActor(name)), name);
     }
-    public int? CurrentStation { get; private set; }
     public string Name { get; private set; }
 
     // Constructor
@@ -21,21 +19,7 @@ public class UserActor : ReceiveActor
 
     private void OnReceivedSendPerformedMessage(SendPerformedMessage message)
     {
-        var previousStation = CurrentStation;
-        if (!CurrentStation.HasValue || CurrentStation.Value != message.StationId)
-        {
-            if (previousStation.HasValue)
-            {
-                var oldStationActor = Context.ActorSelection($"/user/StationCoordinatorActor/Station{previousStation.Value}");
-                oldStationActor.Tell(new StationUserLeftMessage(Name));
-            }
-
-            CurrentStation = message.StationId;
-
-            Console.WriteLine($"Send performed by {Name} at station {CurrentStation.Value}");
-
-            var selection = Context.ActorSelection($"/user/StationCoordinatorActor");
-            selection.Tell(new StationUserSendMessage(message.StationId, Name));
-        }
+        var selection = Context.ActorSelection($"/user/PickingActor/StationCoordinatorActor");
+        selection.Tell(new StationUserSendMessage(message.StationId, Name));
     }
 }

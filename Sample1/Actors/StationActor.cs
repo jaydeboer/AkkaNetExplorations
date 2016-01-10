@@ -22,20 +22,26 @@ public class StationActor : ReceiveActor
 
         // define what messages an actor will act upon
         Receive<StationUserSendMessage>(m => OnReceivedStationUserSendMessage(m));
-        Receive<StationUserLeftMessage>(m => OnReceivedStationUserLeftMessage(m));
+        Receive<UserLeftMessage>(m => OnReceivedStationUserLeftMessage(m));
+        Receive<UserArrivedMessage>(m => OnReceivedUserArrivedMessage(m));
         Receive<StationListUsersRequestMessage>(m => OnReceivedStationListUsersRequestMessage());
-        
+
     }
 
     private readonly HashSet<string> _currentUsers;
 
     private void OnReceivedStationUserSendMessage(StationUserSendMessage message)
     {
+        Console.WriteLine($"Send performed by {message.UsersName} at station {Id}");
+    }
+
+    private void OnReceivedUserArrivedMessage(UserArrivedMessage message)
+    {
         _currentUsers.Add(message.UsersName);
         Console.WriteLine($"The user {message.UsersName} has arrived at station {Id}");
     }
 
-    private void OnReceivedStationUserLeftMessage(StationUserLeftMessage message)
+    private void OnReceivedStationUserLeftMessage(UserLeftMessage message)
     {
         _currentUsers.Remove(message.Name);
         Console.WriteLine($"The user {message.Name} has left station {Id}");
@@ -45,4 +51,27 @@ public class StationActor : ReceiveActor
     {
         Sender.Tell(CurrentUsers);
     }
+
+    #region Messages
+
+    public class UserArrivedMessage
+    {
+        public string UsersName { get; private set; }
+
+        public UserArrivedMessage(string usersName)
+        {
+            UsersName = usersName;
+        }
+    }
+
+    public class UserLeftMessage
+    {
+        public string Name { get; private set; }
+
+        public UserLeftMessage(string usersName)
+        {
+            Name = usersName;
+        }
+    }
+    #endregion
 }

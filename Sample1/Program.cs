@@ -8,17 +8,16 @@ namespace Sample1
         public static void Main(string[] args)
         {
             var system = ActorSystem.Create("UserActorSystem");
-            IActorRef jayActor = UserActor.Create(system, "Jay");
-            IActorRef stationCoordinatorActor = system.ActorOf(Props.Create(() => new StationCoordinatorActor()), "StationCoordinatorActor");
+            IActorRef pickingActor = system.ActorOf(Props.Create(() => new PickingActor()), "PickingActor");
 
-            jayActor.Tell(new SendPerformedMessage(699));
+            pickingActor.Tell(new StationUserSendMessage(699, "Jay"));
             Console.Read();
             
-            var users = stationCoordinatorActor.Ask<string[]>(new StationListUsersRequestMessage(699)).Result;
-            Console.WriteLine($"The following user(s) are at station 699: {string.Join(", ", users)}");
-            Console.Read();
+            //var users = stationCoordinatorActor.Ask<string[]>(new StationListUsersRequestMessage(699)).Result;
+            //Console.WriteLine($"The following user(s) are at station 699: {string.Join(", ", users)}");
+            // Console.Read();
 
-            jayActor.Tell(new SendPerformedMessage(700));
+            pickingActor.Tell(new StationUserSendMessage(700, "Jay"));
             Console.Read();
 
             system.Shutdown();
