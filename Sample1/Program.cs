@@ -13,6 +13,10 @@ namespace Sample1
 
             jayActor.Tell(new SendPerformedMessage(699));
             Console.Read();
+            
+            var users = stationCoordinatorActor.Ask<string[]>(new StationListUsersRequestMessage(699)).Result;
+            Console.WriteLine($"The following user(s) are at station 699: {string.Join(", ", users)}");
+            Console.Read();
 
             jayActor.Tell(new SendPerformedMessage(700));
             Console.Read();

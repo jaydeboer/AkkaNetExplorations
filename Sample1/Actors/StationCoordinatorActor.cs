@@ -16,17 +16,22 @@ public class StationCoordinatorActor : ReceiveActor
         // define what messages an actor will act upon
         Receive<StationUserSendMessage>(m =>
         {
-            var stationRef = CreateChildIfNotExists(m.StationNumber);
-            stationRef.Tell(m);
+            CreateChildIfNotExists(m.StationNumber);
+            _stationActors[m.StationNumber].Tell(m);
         });
+        
+        Receive<StationListUsersRequestMessage>(m =>
+        {
+            CreateChildIfNotExists(m.StationId);
+            _stationActors[m.StationId].Forward(m);
+        });
+
     }
 
-    private IActorRef CreateChildIfNotExists(int stationNumber)
+    private void CreateChildIfNotExists(int stationNumber)
     {
         if (!_stationActors.ContainsKey(stationNumber))
             _stationActors.Add(stationNumber, Context.ActorOf(Props.Create(() => new StationActor(stationNumber)), $"Station{stationNumber}"));
-
-        return _stationActors[stationNumber];
     }
 
     private Dictionary<int, IActorRef> _stationActors;
