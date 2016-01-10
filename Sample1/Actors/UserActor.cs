@@ -26,9 +26,9 @@ public class UserActor : ReceiveActor
                 var oldStationActor = Context.ActorSelection($"/user/StationCoordinatorActor/Station{previousStation.Value}");
                 oldStationActor.Tell(new StationUserLeftMessage(Name));
             }
-            
+
             CurrentStation = message.StationId;
-            
+
             Console.WriteLine($"Send performed by {Name} at station {CurrentStation.Value}");
 
             var selection = Context.ActorSelection($"/user/StationCoordinatorActor");
