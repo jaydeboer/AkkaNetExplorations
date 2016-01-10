@@ -23,6 +23,8 @@ public class StationActor : ReceiveActor
         // define what messages an actor will act upon
         Receive<StationUserSendMessage>(m => OnReceivedStationUserSendMessage(m));
         Receive<StationUserLeftMessage>(m => OnReceivedStationUserLeftMessage(m));
+        Receive<StationListUsersRequestMessage>(m => OnReceivedStationListUsersRequestMessage());
+        
     }
 
     private readonly HashSet<string> _currentUsers;
@@ -37,5 +39,10 @@ public class StationActor : ReceiveActor
     {
         _currentUsers.Remove(message.Name);
         Console.WriteLine($"The user {message.Name} has left station {Id}");
+    }
+
+    private void OnReceivedStationListUsersRequestMessage()
+    {
+        Sender.Tell(CurrentUsers);
     }
 }
