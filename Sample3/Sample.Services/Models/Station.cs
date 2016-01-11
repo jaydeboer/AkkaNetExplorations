@@ -7,13 +7,13 @@ namespace Sample.Services.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public IList<int> ActiveUsers { get { return _activeUsers; } }
+        public IList<string> ActiveUsers { get { return _activeUsers; } }
 
         public Station()
         {
-            _activeUsers = new List<int>();
+            _activeUsers = new List<string>();
         }
 
-        private List<int> _activeUsers;
+        private List<string> _activeUsers;
     }
 }

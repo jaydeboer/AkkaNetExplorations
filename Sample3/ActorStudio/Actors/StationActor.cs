@@ -2,40 +2,65 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Akka.Actor;
+using Sample.Services;
+using Sample.Services.Models;
+using Akka.DI.Core;
 
-public class StationActor : ReceiveActor
+public class StationActor : ReceiveActor, IWithUnboundedStash
 {
-    public int Id { get; private set; }
-
-    public string[] CurrentUsers
-    {
-        get { return _currentUsers.ToArray(); }
-    }
 
     // Constructor
-    public StationActor(int id)
+    public StationActor(IStationService stationService)
     {
-        Id = id;
-        _currentUsers = new HashSet<string>();
+        _stationService = stationService;
 
-        Console.WriteLine($"Creating actor for station {id}");
+        Console.WriteLine($"Creating a station actor");
+        Unconfigured();
+    }
 
-        // define what messages an actor will act upon
+    public IStash Stash { get; set; }
+    private readonly IStationService _stationService;
+    private Station _station;
+
+    #region States of our actor
+    private void Unconfigured()
+    {
+        Receive<Station>(m => OnReceivedAssignStationMessage(m));
+        ReceiveAny(m => Stash.Stash());
+    }
+
+    private void Configured()
+    {
         Receive<StationUserSendMessage>(m => OnReceivedStationUserSendMessage(m));
         Receive<StationUserLeftMessage>(m => OnReceivedStationUserLeftMessage(m));
     }
+    #endregion
 
-    private readonly HashSet<string> _currentUsers;
-
+    #region Messages
     private void OnReceivedStationUserSendMessage(StationUserSendMessage message)
     {
-        _currentUsers.Add(message.UsersName);
-        Console.WriteLine($"The user {message.UsersName} has arrived at station {Id}");
+        _station.ActiveUsers.Add(message.UsersName);
+        Console.WriteLine($"The user {message.UsersName} has arrived at station {_station.Id}");
     }
 
     private void OnReceivedStationUserLeftMessage(StationUserLeftMessage message)
     {
-        _currentUsers.Remove(message.Name);
-        Console.WriteLine($"The user {message.Name} has left station {Id}");
+        _station.ActiveUsers.Remove(message.Name);
+        Console.WriteLine($"The user {message.Name} has left station {_station.Id}");
     }
+
+    /// <summary>
+    /// A station actor should get a station assigned to it.
+    /// </summary>
+    private void OnReceivedAssignStationMessage(Station message)
+    {
+        // We're assuming no duplicates go on here.
+        _station = message;
+        _stationService.AddStation(_station);
+
+        Console.WriteLine($"Assigning a station actor for station {message.Id}");
+        Stash.UnstashAll();
+        Become(Configured);
+    }
+    #endregion
 }

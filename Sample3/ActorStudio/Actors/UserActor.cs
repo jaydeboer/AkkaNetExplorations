@@ -1,23 +1,38 @@
 using System;
+using System.Threading.Tasks;
 using Akka.Actor;
+using Sample.Services.Models;
+using Sample.Services;
 
 public class UserActor : ReceiveActor
 {
-    public static IActorRef Create(ActorSystem system, string name)
-    {
-        return system.ActorOf(Props.Create(() => new UserActor(name)), name);
-    }
     public int? CurrentStation { get; private set; }
     public string Name { get; private set; }
 
     // Constructor
-    public UserActor(string name)
+    public UserActor(IUserService userService)
     {
-        Name = name;
+        _userService = userService;
 
         // define what messages an actor will act upon
+        Unconfigured();
+    }
+
+    private User _user;
+    private IUserService _userService;
+
+    #region Actor states
+    private void Unconfigured()
+    {
+        Receive<User>(message => OnReceiveAssignUserMessage(message));
+    }
+
+    private void Configured()
+    {
         Receive<SendPerformedMessage>(message => OnReceivedSendPerformedMessage(message));
     }
+    #endregion
+
 
     private void OnReceivedSendPerformedMessage(SendPerformedMessage message)
     {
@@ -38,4 +53,12 @@ public class UserActor : ReceiveActor
             selection.Tell(new StationUserSendMessage(message.StationId, Name));
         }
     }
+
+    private void OnReceiveAssignUserMessage(User message)
+    {
+        _user = message;
+
+        Become(Configured);
+    }
+
 }

@@ -10,8 +10,12 @@
   },
 
   "dependencies": {
-      "Akka": "1.0.5"
+    "Akka": "1.0.5",
+    "Akka.DI.AutoFac": "1.0.5-*",
+    "Autofac": "4.0.0-*",
+    "Sample.Services": "1.0.0-*"
   },
+
   "frameworks": {
     "dnx451": { }
   }
