@@ -6,9 +6,6 @@ using Sample.Services;
 
 public class UserActor : ReceiveActor
 {
-    public int? CurrentStation { get; private set; }
-    public string Name { get; private set; }
-
     // Constructor
     public UserActor(IUserService userService)
     {
@@ -36,21 +33,21 @@ public class UserActor : ReceiveActor
 
     private void OnReceivedSendPerformedMessage(SendPerformedMessage message)
     {
-        var previousStation = CurrentStation;
-        if (!CurrentStation.HasValue || CurrentStation.Value != message.StationId)
+        var previousStation = _user.CurrentStation;
+        if (!_user.CurrentStation.HasValue || _user.CurrentStation.Value != message.StationId)
         {
             if (previousStation.HasValue)
             {
                 var oldStationActor = Context.ActorSelection($"/user/StationCoordinatorActor/Station{previousStation.Value}");
-                oldStationActor.Tell(new StationUserLeftMessage(Name));
+                oldStationActor.Tell(new StationUserLeftMessage(_user.Name));
             }
 
-            CurrentStation = message.StationId;
+            _user.CurrentStation = message.StationId;
 
-            Console.WriteLine($"Send performed by {Name} at station {CurrentStation.Value}");
+            Console.WriteLine($"Send performed by {_user.Name} at station {_user.CurrentStation.Value}");
 
             var selection = Context.ActorSelection($"/user/StationCoordinatorActor");
-            selection.Tell(new StationUserSendMessage(message.StationId, Name));
+            selection.Tell(new StationUserSendMessage(message.StationId, _user.Name));
         }
     }
 
