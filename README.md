@@ -29,3 +29,6 @@ For testing, you will need to drop down into the specific testing projects and t
 
 This will kick off the xUnit tests in that project.
 
+For Visual Studio, you will want the [Visual Studio Text Extensions for xUnit.net](https://github.com/xunit/testextensions.xunit)
+in order to run tests from within the IDE.
+
