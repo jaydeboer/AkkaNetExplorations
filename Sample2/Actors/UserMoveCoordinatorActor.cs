@@ -1,3 +1,4 @@
+using System;
 using Akka.Actor;
 using Sample2.DataAccess;
 using Sample2.Models;
@@ -13,12 +14,13 @@ namespace Sample2.Actors
 
         private void OnReceivedCreateMoveRequestMessage(CreateMoveRequestMessage message)
         {
-            //TODO: move repository into another actor to isolate from failure.
             var db = Context.ActorOf(Props.Create(() => new MoveRequestRepositoryActor(new DataAccess.Impl.EFRepositoryFactory())));
             var moveRequest = db.Ask(new MoveRequestRepositoryActor.CreateMessage(message.UsersName, message.FromStationNumber, message.ToStationNumber));
 
             //TODO: process message
             
+            // Clean up the DB Actor
+            db.Tell(PoisonPill.Instance, Self);
         }
     }
 
