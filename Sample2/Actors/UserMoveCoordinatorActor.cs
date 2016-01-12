@@ -6,34 +6,19 @@ namespace Sample2.Actors
 {
     public class UserMoveCoordinatorActor : ReceiveActor
     {
-        public UserMoveCoordinatorActor(IRepositoryFactory repositoryFactory)
+        public UserMoveCoordinatorActor()
         {
-            RepositoryFactory = repositoryFactory;
             Receive<CreateMoveRequestMessage>(message => OnReceivedCreateMoveRequestMessage(message));
         }
-        
-        private readonly IRepositoryFactory RepositoryFactory;
 
         private void OnReceivedCreateMoveRequestMessage(CreateMoveRequestMessage message)
         {
             //TODO: move repository into another actor to isolate from failure.
-            var entity = CreateRequestFromMessage(message);
-            entity.State = MoveRequestState.Completed;
+            var db = Context.ActorOf(Props.Create(() => new MoveRequestRepositoryActor(new DataAccess.Impl.EFRepositoryFactory())));
+            var moveRequest = db.Ask(new MoveRequestRepositoryActor.CreateMessage(message.UsersName, message.FromStationNumber, message.ToStationNumber));
 
             //TODO: process message
-        }
-
-        private MoveRequest CreateRequestFromMessage(CreateMoveRequestMessage message)
-        {
-            var repo = RepositoryFactory.GetMoveRequestRepository();
-            var entity = repo.Create(new MoveRequest()
-            {
-                UsersName = message.UsersName,
-                FromStationNumber = message.FromStationNumber,
-                ToStationNumber = message.ToStationNumber,
-                State = MoveRequestState.Requested
-            });
-            return entity;
+            
         }
     }
 
