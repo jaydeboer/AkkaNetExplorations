@@ -1,0 +1,23 @@
+{
+  "version": "1.0.0-*",
+  "description": "Sample2 Console Application",
+  "authors": [ "" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "tooling": {
+    "defaultNamespace": "Sample2"
+  },
+
+  "dependencies": {
+      "Akka": "1.0.5"
+  },
+
+  "commands": {
+    "Sample2": "Sample2"
+  },
+
+  "frameworks": {
+    "dnx451": { }
+  }
+}
