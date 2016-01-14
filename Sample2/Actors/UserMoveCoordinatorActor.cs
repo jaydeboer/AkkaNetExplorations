@@ -9,6 +9,8 @@ namespace Sample2.Actors
     {
         public UserMoveCoordinatorActor()
         {
+            _activeMoves = new Dictionary<int, IActorRef>();
+            
             Receive<CreateMoveRequestMessage>(message => OnReceivedCreateMoveRequestMessage(message));
             Receive<AcceptMoveRequestMessage>(message => OnReceivedAcceptMoveRequestMessage(message));
             Receive<RejectMoveRequestMessage>(message => OnReceivedRejectMoveRequestMessage(message));
