@@ -14,9 +14,8 @@ namespace Sample2.DataAccess.Impl
         
         public EFMoveRequestRepository()
         {
-            _db = new List<MoveRequest>();
         }
 
-        private List<MoveRequest> _db;
+        private static List<MoveRequest>  _db = new List<MoveRequest>();
     }
 }

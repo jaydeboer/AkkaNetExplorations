@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Akka.Actor;
@@ -59,7 +60,10 @@ namespace Sample2.Actors
         private void FinalizeMove(int id)
         {
             if (_activeMoves.ContainsKey(id))
+            {
                 _activeMoves.Remove(id);
+                Console.WriteLine($"Move {id} finalized.");
+            }
         }
     }
 

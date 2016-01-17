@@ -26,7 +26,7 @@ namespace Sample2
             mra.Tell(new CreateMoveRequestMessage("Jay", 2, 3));
             Console.Read();
             
-            mra.Tell(new RejectMoveRequestMessage(1));
+            mra.Tell(new RejectMoveRequestMessage(2));
             Console.Read();           
 
         }
