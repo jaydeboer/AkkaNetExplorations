@@ -11,28 +11,37 @@ namespace Sample2.Actors
             _model = request;
             _stationCoordinator = Context.ActorSelection($"/user/StationCoordinatorActor");
             Console.WriteLine($"move {_model.Id} created.");
-            
-            Receive<AcceptMessage>(message => {
-                Console.WriteLine($"move {_model.Id} accepted.");
-                _stationCoordinator.Tell(new StationCoordinatorActor.TransferAcceptedMessage(_model));
-            });
-            Receive<RejectMessage>(message => 
-            {
-                Console.WriteLine($"move {_model.Id} rejected.");
-                Self.Tell(PoisonPill.Instance);
-            });
-            Receive<CompleteMessage>(message => 
-            {
-                Console.WriteLine($"move {_model.Id} completed.");
-                Self.Tell(PoisonPill.Instance);
-            });
-            
+
+            Receive<AcceptMessage>(m => OnReceivedAcceptMessage(m));
+            Receive<RejectMessage>(m => OnReceivedRejectMessage(m));
+            Receive<CompleteMessage>(m => OnReceivedCompleteMessage(m));
+
             _stationCoordinator.Tell(new StationCoordinatorActor.TransferRequestedMessage(_model));
         }
 
         private readonly MoveRequest _model;
         private readonly ActorSelection _stationCoordinator;
-        
+
+        private void OnReceivedAcceptMessage(AcceptMessage message)
+        {
+            Console.WriteLine($"move {_model.Id} accepted.");
+            _stationCoordinator.Tell(new StationCoordinatorActor.TransferAcceptedMessage(_model));
+        }
+
+        private void OnReceivedRejectMessage(RejectMessage message)
+        {
+            Console.WriteLine($"move {_model.Id} rejected.");
+            _stationCoordinator.Tell(new StationCoordinatorActor.TransferRejectedMessage(_model));
+            Self.Tell(PoisonPill.Instance);
+        }
+
+        private void OnReceivedCompleteMessage(CompleteMessage message)
+        {
+            Console.WriteLine($"move {_model.Id} completed.");
+            _stationCoordinator.Tell(new StationCoordinatorActor.TransferCompletedMessage(_model));
+            Self.Tell(PoisonPill.Instance);
+        }
+
         // private MoveRequestState State { get; set; }
 
         // public enum MoveRequestState

@@ -75,11 +75,10 @@ namespace Sample2.Actors
 
         private void PrintDetails()
         {
-            Console.WriteLine($"Current info for station {Id}:");
-            Console.WriteLine($"Active Users: {FriendlyList(_activeUsers)}");
-            Console.WriteLine($"Users requested to move: {FriendlyList(_requestedUsers)}");
-            Console.WriteLine($"Users that are leaving: {FriendlyList(_leavingUsers)}");
-            Console.WriteLine($"Users that are inbound: {FriendlyList(_incommingUsers)}");
+            Console.WriteLine($"Station {Id} active Users: {FriendlyList(_activeUsers)}");
+            Console.WriteLine($"Station {Id} users involved in a move request: {FriendlyList(_requestedUsers)}");
+            Console.WriteLine($"Station {Id} users that are leaving: {FriendlyList(_leavingUsers)}");
+            Console.WriteLine($"Station {Id} users that are inbound: {FriendlyList(_incommingUsers)}");
             Console.WriteLine();
         }
 
