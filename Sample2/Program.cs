@@ -10,13 +10,14 @@ namespace Sample2
         {
             var system = ActorSystem.Create("MoveRequestActorSystem");
             var mra = system.ActorOf(Props.Create(() => new UserMoveCoordinatorActor()));
-            
-            mra.Tell(new CreateMoveRequestMessage("Jay", 1,2));
+            var stationCoordinator = system.ActorOf(Props.Create(() => new StationCoordinatorActor()), "StationCoordinatorActor");
+
+            mra.Tell(new CreateMoveRequestMessage("Jay", 1, 2));
             Console.Read();
-            
+
             mra.Tell(new RejectMoveRequestMessage(1));
             Console.Read();
-            
+
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Sample2.Actors
                 UsersName = message.UsersName,
                 FromStationNumber = message.FromStationNumber,
                 ToStationNumber = message.ToStationNumber,
-                State = MoveRequestState.Requested
+                //State = MoveRequestState.Requested
             });
             return entity;
         }

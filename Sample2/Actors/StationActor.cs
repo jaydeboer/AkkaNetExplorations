@@ -82,7 +82,7 @@ namespace Sample2.Actors
             Console.WriteLine($"Users that are inbound: {FriendlyList(_incommingUsers)}");
             Console.WriteLine();
         }
-        
+
         private string FriendlyList(List<string> list)
         {
             if (list.Any())
@@ -94,67 +94,67 @@ namespace Sample2.Actors
                 return "None";
             }
         }
-    }
 
-    #region Messages
+        #region Messages
 
-    public class TransferInRequestedMessage
-    {
-        public string User { get; private set; }
-
-        public TransferInRequestedMessage(string user)
+        public class TransferInRequestedMessage
         {
-            User = user;
+            public string User { get; private set; }
+
+            public TransferInRequestedMessage(string user)
+            {
+                User = user;
+            }
         }
-    }
 
-    public class TransferOutRequestedMessage
-    {
-        public string User { get; private set; }
-
-        public TransferOutRequestedMessage(string user)
+        public class TransferOutRequestedMessage
         {
-            User = user;
-        }
-    }
+            public string User { get; private set; }
 
-    public class TransferInAcceptedMessage
-    {
-        public string User { get; private set; }
-        TransferInAcceptedMessage(string user)
+            public TransferOutRequestedMessage(string user)
+            {
+                User = user;
+            }
+        }
+
+        public class TransferInAcceptedMessage
         {
-            User = user;
+            public string User { get; private set; }
+            public TransferInAcceptedMessage(string user)
+            {
+                User = user;
+            }
         }
-    }
 
-    public class TransferOutAcceptedMessage
-    {
-        public string User { get; private set; }
-
-        public TransferOutAcceptedMessage(string user)
+        public class TransferOutAcceptedMessage
         {
-            User = user;
-        }
-    }
+            public string User { get; private set; }
 
-    public class TransferCompletedMessage
-    {
-        public string User { get; private set; }
-        TransferCompletedMessage(string user)
+            public TransferOutAcceptedMessage(string user)
+            {
+                User = user;
+            }
+        }
+
+        public class TransferCompletedMessage
         {
-            User = user;
+            public string User { get; private set; }
+            public TransferCompletedMessage(string user)
+            {
+                User = user;
+            }
         }
-    }
 
-    public class TransferRequestRejectedMessage
-    {
-        public string User { get; private set; }
-
-        public TransferRequestRejectedMessage(string user)
+        public class TransferRequestRejectedMessage
         {
-            User = user;
-        }
-    }
+            public string User { get; private set; }
 
-    #endregion
+            public TransferRequestRejectedMessage(string user)
+            {
+                User = user;
+            }
+        }
+
+        #endregion
+    }
 }
