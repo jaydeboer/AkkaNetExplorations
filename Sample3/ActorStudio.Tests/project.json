@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0-*",
+  "description": "Actor Studio Test Suite",
+  "authors": [ "" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "tooling": {
+    "defaultNamespace": "ActorStudio.Tests"
+  },
+
+  "dependencies": {
+    "ActorStudio": "1.0.0-*",
+    "Akka": "1.0.5",
+    "xunit": "2.1.0-*",
+    "xunit.runner.dnx": "2.1.0-*"
+  },
+
+  "commands": {
+    "test": "xunit.runner.dnx"
+  },
+
+  "frameworks": {
+    "dnx451": { }
+  }
+}

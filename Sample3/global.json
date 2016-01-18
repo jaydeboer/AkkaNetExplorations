@@ -1,0 +1,8 @@
+{
+  "projects": [
+    "ActorStudio",
+    "ActorStudio.Tests",
+    "Sample.Services",
+    "Sample.Services.Tests"
+  ]
+}
